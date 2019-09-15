@@ -1,0 +1,6 @@
+.idea
+.prettierrc.js
+/_tests_
+/android
+/ios
+/node_modules
