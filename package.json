@@ -8,8 +8,10 @@
 		"lint": "eslint ."
 	},
 	"dependencies": {
+		"native-base": "^2.13.8",
 		"react": "16.8.6",
 		"react-native": "0.60.5",
+		"react-navigation": "^4.0.10",
 		"react-redux": "^7.1.1",
 		"redux": "^4.0.4",
 		"redux-thunk": "^2.3.0"

@@ -55,13 +55,12 @@ const self = {
                     });
                 }
             }
-
             callback(response);
         })
         .catch(function (error) {
                 dispatch(common.removeNotification());
                 dispatch(common.notify("Something went wrong. Please try again later.", 'error'));
-             console.error("AOI LIB ERROR : ", error);   
+             console.error("API LIB ERROR : ", error);   
         });
     },
     sendExtRequest : function(url, data, callback) {
