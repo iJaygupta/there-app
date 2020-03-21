@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { withRouter } from 'react-router-dom';
 
 
 export default class SignUp extends Component {
 
     render() {
+        console.log("Sign up component");
         return (
             <View style={styles.container}>
                 <Text style={{ color: '#ffffff', fontSize: 20 }}>Welcome to There App</Text>
@@ -23,6 +25,18 @@ export default class SignUp extends Component {
         );
     }
 
+}
+
+const mapStateToProps = (state) => {
+    return {
+
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+
+    }
 }
 
 const styles = StyleSheet.create({
@@ -54,7 +68,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 110,
         alignItems: "center",
         justifyContent: "center",
-        
+
     }
 });
 

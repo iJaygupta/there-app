@@ -1,7 +1,6 @@
-import React, { Component } from 'react'
-import SignUp from "../components/common/Signup";
-import { View, Text, StyleSheet , StatusBar} from 'react-native';
-
+import React, { Component } from 'react';
+import SignUp from "../components/common/Auth";
+import { View, Text, StyleSheet , StatusBar } from 'react-native';
 
 export default class AppContainer extends Component {
   render() {
@@ -11,11 +10,9 @@ export default class AppContainer extends Component {
       backgroundColor="#1c313a"
       barStyle="light-content"/>
       <SignUp/>
-
       </View>
     );
   }
-
 }
 
 const styles = StyleSheet.create({

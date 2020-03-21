@@ -1,5 +1,11 @@
 import { combineReducers } from 'redux';
+import auth from '../reducers/auth/Auth'
 
-import UIReducer from './UIReducer';
 
-export default combineReducers({ UIReducer });
+export const application = combineReducers({
+    auth
+});
+
+export const initialState = {
+    auth: auth({}, { type: "init " })
+}
