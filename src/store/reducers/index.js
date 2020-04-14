@@ -1,11 +1,8 @@
 import { combineReducers } from 'redux';
-import auth from '../reducers/auth/Auth'
+import Auth from './auth/auth';
+import Home from './home/home';
 
-
-export const application = combineReducers({
-    auth
+export default combineReducers({
+    Auth,
+    Home,
 });
-
-export const initialState = {
-    auth: auth({}, { type: "init " })
-}

@@ -1,13 +1,14 @@
-import React from 'react';
-// import { Provider } from 'react-redux';
-import AppContainer from './src/App';
+import React from 'react'
+import { Provider } from 'react-redux'
+import store from '~/store/'
+import App from '~/App'
 // import Store from './src/store';
 
 const App = () => {
 	return (
-		// <Provider store={Store}>
-		<AppContainer />
-		// </Provider>
+		<Provider store={store}>
+			<App />
+		</Provider>
 	);
 };
 

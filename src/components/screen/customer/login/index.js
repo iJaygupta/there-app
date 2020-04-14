@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { TextInput, View, Picker, TouchableOpacity, Keyboard } from "react-native";
+import { TextInput, View, Picker, TouchableOpacity, Keyboard, ToastAndroid } from "react-native";
 import { Container, Text, Button, Icon } from 'native-base';
 import AsyncStorage from '@react-native-community/async-storage'
 
@@ -49,6 +49,74 @@ export default class HomeActivity extends Component {
     } else {
       return true;
     }
+  }
+
+  navigateToHome = () => {
+
+    if (this.state.saveData) {
+      ToastAndroid.show('Login successfully!', ToastAndroid.LONG);
+      this.props.navigation.navigate('Home');
+    }
+
+  }
+
+  loginApiCall = () => {
+
+    const { authAction } = this.props;
+    const username = this.state.phoneNumber;
+    const password = this.state.otp;
+    let details = {
+      'grant_type': 'password',
+      'username': username,
+      'password': password,
+    };
+    let formBody = [];
+    for (let property in details) {
+      let encodedKey = encodeURIComponent(property);
+      let encodedValue = encodeURIComponent(details[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+    authAction.login(formBody, this.loginSuccessResponse);
+
+  }
+
+  loginSuccessResponse = (response) => {
+    const responseData = response.data;
+    if (responseData.success === 1) {
+      this.setState({
+        userLoginData: responseData.data,
+        saveData: true
+      });
+      this.navigateToHome();
+    } else {
+      ToastAndroid.show(responseData.message, ToastAndroid.LONG);
+    }
+
+  }
+
+  sendNumberForOTP = () => {
+
+    const { authAction } = this.props;
+    const countryCode = this.state.phoneCountry;
+    const phone = this.state.phoneNumber;
+    authAction.otp(countryCode, phone, this.otpResponse);
+
+  }
+
+  otpResponse = (response) => {
+
+    const responseJson = response.data;
+    if (responseJson.success) {
+      // set state 
+      if (responseJson.data.isRegistered) {
+        // set state 
+      } else {
+        // set state 
+      }
+      ToastAndroid.show('OTP Receive', ToastAndroid.SHORT);
+    }
+
   }
 
   render() {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { TextInput, View, Picker, TouchableOpacity, Keyboard } from "react-native";
+import { TextInput, View, Picker, TouchableOpacity, Keyboard, ToastAndroid } from "react-native";
 import { Container, Text, Button, Icon } from 'native-base';
 import AsyncStorage from '@react-native-community/async-storage'
 
@@ -43,6 +43,11 @@ export default class HomeActivity extends Component {
     return true;
   }
 
+  navigateToHome() {
+    ToastAndroid.show('Login Succesfuly!', ToastAndroid.SHORT);
+    this.props.navigation.navigate('Home');
+  }
+
   saveUserdata = async () => {
     try {
       await AsyncStorage.setItem('phoneCountry', this.state.phoneCountry);
@@ -53,6 +58,31 @@ export default class HomeActivity extends Component {
       await AsyncStorage.setItem('otp', this.state.otp);
     } catch (error) {
       console.log('Err to save user data =>', error);
+    }
+  }
+
+  signUpUserApi = () => {
+    const { authAction } = this.props;
+    const userData = this.state;
+    const data = {
+      country_code: userData.phoneCountry,
+      name: userData.name,
+      phone: userData.phoneNumber,
+      otp: userData.otp,
+      email: userData.email,
+      pincode: userData.pinCode,
+    };
+    authAction.signUp(data, this.signupSuccessResponse);
+
+  }
+
+  signupSuccessResponse = (response) => {
+    const responseJson = response.data;
+    if (responseJson.success) {
+      const password = parseInt(responseJson.data.password);
+      // navigate to home
+    } else {
+      ToastAndroid.show(responseJson.data.exception, ToastAndroid.LONG);
     }
   }
 
