@@ -1,20 +1,19 @@
 import React, { Component } from "react";
-import { TextInput, View, Picker, TouchableOpacity, Keyboard, ToastAndroid } from "react-native";
+import { View, TouchableOpacity, Keyboard, } from "react-native";
 import { Container, Text, Button, Icon } from 'native-base';
-import AsyncStorage from '@react-native-community/async-storage'
-
-import { Card } from '~/components/ui';
-
+import storage from '~/lib/storage';
+import { Card, Input } from '~/components/ui';
 import styles from './styles';
 
 
-export default class HomeActivity extends Component {
+export default class login extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      phoneCountry: '',
+      phoneCountry: 91,
       phoneNumber: '',
+      password: '',
       error: false,
       errorMesg: ''
     }
@@ -23,100 +22,53 @@ export default class HomeActivity extends Component {
   loginHandler = async () => {
     Keyboard.dismiss();
     if (await this.validateHandler()) {
-      this.props.navigation.navigate('Home');
+      this.loginApiCall();
     }
   }
 
   validateHandler = async () => {
-    const phone = await AsyncStorage.getItem('phoneNumber');
-
-    console.log(phone);
-
-    if (this.state.phoneNumber !== phone) {
-      if (this.state.phoneNumber === '') {
-        this.setState({
-          error: true,
-          errorMesg: 'Phone number required'
-        });
-        return false;
-      } else {
-        this.setState({
-          error: true,
-          errorMesg: 'Invalid phone number'
-        });
-        return false;
-      }
-    } else {
-      return true;
+    if (this.state.phoneNumber === '') {
+      this.setState({
+        error: true,
+        errorMesg: 'Phone number required'
+      });
+      return false;
     }
+    if (this.state.password === '') {
+      this.setState({
+        error: true,
+        errorMesg: 'Passsword required'
+      });
+      return false;
+    }
+    return true;
   }
 
   navigateToHome = () => {
-
-    if (this.state.saveData) {
-      ToastAndroid.show('Login successfully!', ToastAndroid.LONG);
-      this.props.navigation.navigate('Home');
-    }
-
+    this.props.navigation.navigate('Profile');
   }
 
   loginApiCall = () => {
-
     const { authAction } = this.props;
-    const username = this.state.phoneNumber;
-    const password = this.state.otp;
-    let details = {
-      'grant_type': 'password',
-      'username': username,
+    const username = this.state.phoneCountry + this.state.phoneNumber;
+    const password = this.state.password;
+    let data = JSON.stringify({
+      'mobile': username,
       'password': password,
-    };
-    let formBody = [];
-    for (let property in details) {
-      let encodedKey = encodeURIComponent(property);
-      let encodedValue = encodeURIComponent(details[property]);
-      formBody.push(encodedKey + "=" + encodedValue);
-    }
-    formBody = formBody.join("&");
-    authAction.login(formBody, this.loginSuccessResponse);
-
+    });
+    authAction.login(data, this.loginSuccessResponse);
   }
 
   loginSuccessResponse = (response) => {
     const responseData = response.data;
-    if (responseData.success === 1) {
-      this.setState({
-        userLoginData: responseData.data,
-        saveData: true
-      });
+    if (!responseData.error) {
+      const userData = {
+        token: responseData.token,
+        user_info: responseData.data,
+      };
+      storage.setStorage('data', userData);
       this.navigateToHome();
-    } else {
-      ToastAndroid.show(responseData.message, ToastAndroid.LONG);
     }
-
-  }
-
-  sendNumberForOTP = () => {
-
-    const { authAction } = this.props;
-    const countryCode = this.state.phoneCountry;
-    const phone = this.state.phoneNumber;
-    authAction.otp(countryCode, phone, this.otpResponse);
-
-  }
-
-  otpResponse = (response) => {
-
-    const responseJson = response.data;
-    if (responseJson.success) {
-      // set state 
-      if (responseJson.data.isRegistered) {
-        // set state 
-      } else {
-        // set state 
-      }
-      ToastAndroid.show('OTP Receive', ToastAndroid.SHORT);
-    }
-
   }
 
   render() {
@@ -124,7 +76,7 @@ export default class HomeActivity extends Component {
       <Container style={styles.container}>
         <Text style={styles.headerText}>Sign In</Text>
         <Card style={styles.cardView}>
-          <View style={styles.pickerContainer}>
+          <View style={styles.formContainer}>
             {this.state.error ?
               <Text style={styles.emailError}>
                 {this.state.errorMesg}
@@ -132,35 +84,25 @@ export default class HomeActivity extends Component {
               :
               null
             }
-            <View style={styles.SectionStyle}>
-              <View style={{ flex: 0.2 }}>
-                <Icon name={'md-person'} style={styles.ImageStyle} />
-              </View>
-              <View style={{ flex: 0.6, }}>
-                <Picker
-                  style={styles.picker}
-                  selectedValue={this.state.phoneCountry}
-                  onValueChange={(itemValue, itemIndex) => this.setState({ phoneCountry: itemValue })} >
-                  <Picker.Item label="+91" value="+91" />
-                  <Picker.Item label="+12" value="+12" />
-                  <Picker.Item label="+13" value="13" />
-                  <Picker.Item label="+14" value="+14" />
-                  <Picker.Item label="+15" value="+15" />
-                  <Picker.Item label="+16" value="+16" />
-                </Picker>
-              </View>
-              <View style={{ flex: 1, }}>
-                <TextInput
-                  style={styles.input}
-                  keyboardType={'number-pad'}
-                  maxLength={15}
-                  value={this.state.phoneNumber}
-                  onChangeText={(phoneNumber) => this.setState({ phoneNumber })}
-                  placeholder={'Enter mobile number'}
-                  onSubmitEditing={this.loginHandler}
-                />
-              </View>
-            </View>
+            <Input
+              style={styles.input}
+              keyboardType={'number-pad'}
+              maxLength={15}
+              value={this.state.phoneNumber}
+              onChangeText={(phoneNumber) => this.setState({ phoneNumber })}
+              placeholder={'Enter mobile number'}
+              onSubmitEditing={this.loginHandler}
+            >
+              <Icon name={'md-person'} style={styles.icon} />
+            </Input>
+            <Input
+              placeholder={'Enter your password'}
+              maxLength={8}
+              value={this.state.password}
+              onChangeText={(password) => this.setState({ password })}
+            >
+              <Icon name={'md-key'} style={styles.icon} />
+            </Input>
             <Button
               style={styles.button}
               onPress={this.loginHandler}

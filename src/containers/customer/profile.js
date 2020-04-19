@@ -1,4 +1,4 @@
-import Home from '~/components/screen/customer/profile';
+import Profile from '~/components/screen/customer/profile';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import actions from '~/store/actions';
@@ -16,4 +16,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

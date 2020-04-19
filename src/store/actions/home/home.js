@@ -1,11 +1,11 @@
 import api from '~/lib/api';
-import { API_END_POINT } from '~/config/env';
+import Path from '~/config/apipath';
 
 const home = {
 
   getHomePage: function (callback) {
     return dispatch => {
-      api.sendRequest(API_END_POINT, null, false, callback, dispatch)
+      api.sendRequest(Path, null, false, callback, dispatch)
     }
   }
 }

@@ -4,11 +4,11 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createStackNavigator } from 'react-navigation-stack';
 
-import Login from './containers/login';
-import SignUp from './containers/signup';
-
 import SideBar from './containers/sidebar';
-import Profile from './containers/profile/';
+
+import Login from './containers/customer/login';
+import SignUp from './containers/customer/signup';
+import Profile from './containers/customer/profile/';
 
 
 // Drawer Navigation

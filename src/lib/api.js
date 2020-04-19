@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URI } from '~/config/env';
+import Path from '~/config/apipath';
 
 const self = {
   method: "GET",
@@ -19,9 +19,9 @@ const self = {
     self.headers = { "Content-Type": "application/json" };
     return self;
   },
-  sendRequest: function (url, data, authenticate, callback, dispatch) {
+  sendRequest: function (url, data, callback, dispatch) {
 
-    url = API_URI + url;
+    url = Path.base_url + url;
     return axios({
       method: self.method,
       url: url,
@@ -44,7 +44,7 @@ const self = {
       });
   },
   sendExtRequest: function (url, data, callback, dispatch) {
-
+    url = Path.base_url + url;
     return axios({
       method: self.method,
       url: url,
@@ -66,7 +66,7 @@ const self = {
   },
   sendFormRequest: function (url, data, callback, dispatch) {
 
-    url = API_URI + url;
+    url = Path.base_url + url;
     return axios({
       method: self.method,
       url: url,
