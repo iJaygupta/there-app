@@ -4,3 +4,5 @@ export default {
     logIn: 'user/login',
     lookup: 'common/lookup'
 }
+
+//http://18.223.149.26:8001/common/lookup

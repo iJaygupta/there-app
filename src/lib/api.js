@@ -36,7 +36,6 @@ const self = {
     })
       .then(function (response) {
         self.reset();
-
         callback(response);
       })
       .catch(function (error) {

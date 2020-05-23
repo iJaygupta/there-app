@@ -8,6 +8,7 @@ import SideBar from './containers/sidebar';
 
 import Login from './containers/customer/login';
 import SignUp from './containers/customer/signup';
+import OTP from './containers/customer/otp';
 import Profile from './containers/customer/profile/';
 
 
@@ -40,9 +41,10 @@ const AuthNavigator = createStackNavigator(
   {
     Login: Login,
     SignUp: SignUp,
+    OTP: OTP
   },
   {
-    initialRouteName: "Login",
+    initialRouteName: "OTP",
     headerMode: 'none',
   }
 );
@@ -66,5 +68,3 @@ const App = () => (
 )
 
 export default App;
-
-

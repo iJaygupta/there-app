@@ -24,7 +24,7 @@ const auth = {
   },
   signUp: function (data, callback) {
     return dispatch => {
-      api.setMethod('PUT').sendRequest(Path.signUp, data, false, callback, dispatch)
+      api.setMethod('POST').sendRequest(Path.signUp, data,callback, dispatch)
     }
   },
 }

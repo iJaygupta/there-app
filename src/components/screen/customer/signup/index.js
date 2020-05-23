@@ -1,24 +1,20 @@
 import React, { Component } from "react";
 import { TextInput, View, Picker, TouchableOpacity, Keyboard, ToastAndroid } from "react-native";
 import { Container, Text, Button, Icon } from 'native-base';
-import AsyncStorage from '@react-native-community/async-storage'
 
 import { Card } from '~/components/ui';
 
 import styles from './styles';
 
-
-export default class HomeActivity extends Component {
+export default class SignUp extends Component {
 
   constructor() {
     super();
     this.state = {
       phoneCountry: '',
       phoneNumber: '',
-      email: '',
       name: '',
-      pinCode: '',
-      otp: '',
+      password: '',
       error: false,
       errorMesg: ''
     }
@@ -27,8 +23,7 @@ export default class HomeActivity extends Component {
   signUpHandler = async () => {
     Keyboard.dismiss();
     if (await this.validateHandler()) {
-      this.saveUserdata();
-      this.props.navigation.navigate('Home');
+      this.signUpUserApi();
     }
   }
 
@@ -44,43 +39,27 @@ export default class HomeActivity extends Component {
   }
 
   navigateToHome() {
-    ToastAndroid.show('Login Succesfuly!', ToastAndroid.SHORT);
-    this.props.navigation.navigate('Home');
-  }
-
-  saveUserdata = async () => {
-    try {
-      await AsyncStorage.setItem('phoneCountry', this.state.phoneCountry);
-      await AsyncStorage.setItem('phoneNumber', this.state.phoneNumber);
-      await AsyncStorage.setItem('email', this.state.email);
-      await AsyncStorage.setItem('name', this.state.name);
-      await AsyncStorage.setItem('pinCode', this.state.pinCode);
-      await AsyncStorage.setItem('otp', this.state.otp);
-    } catch (error) {
-      console.log('Err to save user data =>', error);
-    }
+    ToastAndroid.show('SignUp Succesfuly!', ToastAndroid.SHORT);
+    this.props.navigation.navigate('Login');
   }
 
   signUpUserApi = () => {
     const { authAction } = this.props;
     const userData = this.state;
-    const data = {
-      country_code: userData.phoneCountry,
+    const mobileNumber = 91 + userData.phoneNumber;
+    const data = JSON.stringify({
       name: userData.name,
-      phone: userData.phoneNumber,
-      otp: userData.otp,
-      email: userData.email,
-      pincode: userData.pinCode,
-    };
+      mobile: mobileNumber,
+      password: userData.password
+    });
     authAction.signUp(data, this.signupSuccessResponse);
 
   }
 
   signupSuccessResponse = (response) => {
     const responseJson = response.data;
-    if (responseJson.success) {
-      const password = parseInt(responseJson.data.password);
-      // navigate to home
+    if (responseJson.code === 4000) {
+      this.navigateToHome();
     } else {
       ToastAndroid.show(responseJson.data.exception, ToastAndroid.LONG);
     }
@@ -129,14 +108,6 @@ export default class HomeActivity extends Component {
             </View>
             <TextInput
               style={styles.input}
-              keyboardType={'email-address'}
-              maxLength={70}
-              value={this.state.email}
-              onChangeText={(email) => this.setState({ email })}
-              placeholder={'Email address'}
-            />
-            <TextInput
-              style={styles.input}
               maxLength={70}
               value={this.state.name}
               onChangeText={(name) => this.setState({ name })}
@@ -145,18 +116,10 @@ export default class HomeActivity extends Component {
             <TextInput
               style={styles.input}
               keyboardType={'number-pad'}
-              maxLength={6}
-              value={this.state.pinCode}
-              onChangeText={(pinCode) => this.setState({ pinCode })}
-              placeholder={'PIN code'}
-            />
-            <TextInput
-              style={styles.input}
-              keyboardType={'number-pad'}
               maxLength={70}
-              value={this.state.otp}
-              onChangeText={(otp) => this.setState({ otp })}
-              placeholder={'OTP'}
+              value={this.state.password}
+              onChangeText={(password) => this.setState({ password })}
+              placeholder={'Password'}
             />
             <Button
               style={styles.button}
