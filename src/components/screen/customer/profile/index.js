@@ -2,10 +2,8 @@ import React from 'react';
 import {
   Text,
   View,
-  TouchableOpacity
 } from 'react-native';
 import { Container, Content, Col, Icon } from 'native-base';
-
 import { Card, Image } from '~/components/ui/';
 import { Header } from '~/components/common/';
 import styles from './styles';
@@ -19,6 +17,14 @@ const data = [
 ];
 
 const profile = props => {
+
+  const { profileDetails, profileAction, authData } = props;
+  const token = authData.token;
+  // profileAction.getProfileDetails(token, getProfileSuccessResponse);
+
+  function getProfileSuccessResponse(response) {
+    console.log('profile =>', response);
+  }
 
   const components = data.map((item, key) => {
     return (

@@ -62,23 +62,24 @@ export default class login extends Component {
 
   loginSuccessResponse = (response) => {
     const responseData = response.data;
-    if (!responseData.error) {
+    if (!responseData.error && responseData.code === 4001) {
       const userData = {
         token: responseData.token,
         user_info: responseData.data,
       };
       storage.setStorage('data', userData);
       if (!responseData.data.is_phone_verified) {
-        this.getOTP(userData);
+        this.getOTP(responseData.token);
       } else {
         this.props.navigation.navigate('Profile');
       }
+    } else {
+      ToastAndroid.show(responseData.msg, ToastAndroid.LONG);
     }
   }
 
-  getOTP = (userData) => {
+  getOTP = (token) => {
     const { authAction } = this.props;
-    const token = userData.token;
     authAction.otp(token, this.otpSuccessResponse);
   }
 

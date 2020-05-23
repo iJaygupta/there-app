@@ -34,6 +34,18 @@ export default class SignUp extends Component {
         errorMesg: 'Phone number required'
       });
       return false;
+    } else if (this.state.name === '') {
+      this.setState({
+        error: true,
+        errorMesg: 'Name required!'
+      });
+      return false;
+    } else if (this.state.password === '') {
+      this.setState({
+        error: true,
+        errorMesg: 'Password required!'
+      });
+      return false;
     }
     return true;
   }
@@ -60,7 +72,6 @@ export default class SignUp extends Component {
 
   signupSuccessResponse = (response) => {
     const responseJson = response.data;
-    console.log('responseJson =>', responseJson);
     if (responseJson.code === 4000) {
       this.navigateToLoginScreen();
     } else {

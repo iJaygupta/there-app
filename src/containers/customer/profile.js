@@ -5,14 +5,15 @@ import actions from '~/store/actions';
 
 const mapStateToProps = state => {
   return {
-    homeData: state.Home
+    profileDetails: state.Profile,
+    authData: state.Auth
   }
 };
 
 function mapDispatchToProps(dispatch) {
 
   return {
-    homeAction: bindActionCreators(actions.home, dispatch),
+    profileAction: bindActionCreators(actions.profile, dispatch),
   };
 }
 

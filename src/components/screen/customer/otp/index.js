@@ -11,7 +11,7 @@ export default class OTP extends Component {
     this.state = {
       otp: '',
       error: false,
-      errorMesg: ''
+      errorMessages: ''
     }
   }
 
@@ -26,7 +26,7 @@ export default class OTP extends Component {
     if (this.state.otp === '') {
       this.setState({
         error: true,
-        errorMesg: 'OTP required'
+        errorMessages: 'OTP required'
       });
       return false;
     }
@@ -73,7 +73,7 @@ export default class OTP extends Component {
           <View style={styles.formContainer}>
             {this.state.error ?
               <Text style={styles.emailError}>
-                {this.state.errorMesg}
+                {this.state.errorMessages}
               </Text>
               :
               null
