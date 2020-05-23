@@ -6,6 +6,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import SideBar from './containers/sidebar';
 
+import Splash from './containers/splash';
 import Login from './containers/customer/login';
 import SignUp from './containers/customer/signup';
 import OTP from './containers/customer/otp';
@@ -54,9 +55,10 @@ const AppContainer = createAppContainer(
     {
       Auth: AuthNavigator,
       App: AppNavigator,
+      Splash: Splash
     },
     {
-      initialRouteName: 'Auth',
+      initialRouteName: 'Splash',
     }
   )
 );

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Path from '~/config/apipath';
+import storage from '~/lib/storage';
 
 const self = {
   method: "GET",
@@ -42,26 +43,52 @@ const self = {
         console.log("API LIB ERROR : ", error);
       });
   },
-  sendExtRequest: function (url, data, callback, dispatch) {
+  sendExtRequest: function (url, data, authonticate, callback, dispatch) {
     url = Path.base_url + url;
-    return axios({
-      method: self.method,
-      url: url,
-      responseType: 'json',
-      headers: self.headers,
-      data: data,
-      timeout: 120000,
-      params: (self.method == "GET") ? data : {}
-    })
-      .then(function (response) {
-        self.reset();
+    if (authonticate) {
+      storage.getStorage('data').then((res) => {
+        const userData = JSON.parse(res);
+        const token = userData.token;
+        self.setHeader('Authorization', token);
+        return axios({
+          method: self.method,
+          url: url,
+          responseType: 'json',
+          headers: self.headers,
+          data: data,
+          timeout: 120000,
+          params: (self.method == "GET") ? data : {}
+        })
+          .then(function (response) {
+            self.reset();
 
-        callback(response);
-      })
-      .catch(function (error) {
-        console.error("API LIB ERROR : ", error);
-        callback(error);
+            callback(response);
+          })
+          .catch(function (error) {
+            console.log("API LIB ERROR : ", error);
+            callback(error);
+          });
       });
+    } else {
+      return axios({
+        method: self.method,
+        url: url,
+        responseType: 'json',
+        headers: self.headers,
+        data: data,
+        timeout: 120000,
+        params: (self.method == "GET") ? data : {}
+      })
+        .then(function (response) {
+          self.reset();
+
+          callback(response);
+        })
+        .catch(function (error) {
+          console.log("API LIB ERROR : ", error);
+          callback(error);
+        });
+    }
   },
   sendFormRequest: function (url, data, callback, dispatch) {
 
@@ -84,7 +111,7 @@ const self = {
         callback(response);
       })
       .catch(function (error) {
-        console.error("API LIB ERROR : ", error);
+        console.log("API LIB ERROR : ", error);
       });
   },
 }

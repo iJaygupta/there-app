@@ -109,7 +109,6 @@ export default class login extends Component {
             <Input
               style={styles.input}
               keyboardType={'number-pad'}
-              maxLength={15}
               value={this.state.phoneNumber}
               onChangeText={(phoneNumber) => this.setState({ phoneNumber })}
               placeholder={'Enter mobile number'}
@@ -119,7 +118,6 @@ export default class login extends Component {
             </Input>
             <Input
               placeholder={'Enter your password'}
-              maxLength={8}
               value={this.state.password}
               onChangeText={(password) => this.setState({ password })}
             >

@@ -24,12 +24,12 @@ const auth = {
   },
   otp: function (token, callback) {
     return dispatch => {
-      api.setHeader('Authorization', token).sendExtRequest(Path.OTP, undefined, callback, dispatch)
+      api.setHeader('Authorization', token).sendExtRequest(Path.OTP, undefined, false, callback, dispatch)
     }
   },
   otpValidate: function (token, data, callback) {
     return dispatch => {
-      api.setMethod('POST').setHeader('Authorization', token).sendExtRequest(Path.OTPValidate, data, callback, dispatch)
+      api.setMethod('POST').setHeader('Authorization', token).sendExtRequest(Path.OTPValidate, data, false, callback, dispatch)
     }
   }
 }

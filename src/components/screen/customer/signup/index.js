@@ -112,7 +112,6 @@ export default class SignUp extends Component {
               <View style={{ flex: 1, }}>
                 <TextInput
                   keyboardType={'number-pad'}
-                  maxLength={15}
                   value={this.state.phoneNumber}
                   onChangeText={(phoneNumber) => this.setState({ phoneNumber })}
                   placeholder={'Enter mobile number'}
@@ -122,7 +121,6 @@ export default class SignUp extends Component {
             </View>
             <TextInput
               style={styles.input}
-              maxLength={70}
               value={this.state.name}
               onChangeText={(name) => this.setState({ name })}
               placeholder={'Full Name'}

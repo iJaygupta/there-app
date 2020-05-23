@@ -10,7 +10,7 @@ const storage = {
   getStorage: function (key) {
     const data = AsyncStorage.getItem(key);
     return data;
-  }
+  },
 };
 
 export default storage;

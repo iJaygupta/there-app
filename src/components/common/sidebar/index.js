@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Container, Footer, Icon, Row } from 'native-base';
 import { withNavigation } from 'react-navigation';
-import AsyncStorage from '@react-native-community/async-storage';
+import storage from '~/lib/storage';
 
 import styles from './style';
 
@@ -18,27 +18,8 @@ class SideBar extends Component {
     };
   }
 
-  async componentDidMount() {
-
-    const userName = await AsyncStorage.getItem("name");
-    const userEmail = await AsyncStorage.getItem("email");
-    const userPhone = await AsyncStorage.getItem("phoneNumber");
-    const pinCode = await AsyncStorage.getItem("pinCode");
-
-    this.setState({
-      username: userName,
-      useremail: userEmail,
-      userphone: userPhone,
-      pinCode: pinCode
-    });
-  }
-
   logout = async () => {
-    // await AsyncStorage.removeItem('emial');
-    // await AsyncStorage.removeItem('password');
-    // await AsyncStorage.removeItem('name');
-    // await AsyncStorage.removeItem('phone');
-    // await AsyncStorage.removeItem('otp');
+    storage.removeStorage('data');
     this.props.navigation.navigate('Login');
     return false;
   };

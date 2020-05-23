@@ -3,9 +3,9 @@ import Path from '~/config/apipath';
 
 
 const profile = {
-  getProfileDetails: function (token, callback) {
+  getProfileDetails: function (callback) {
     return dispatch => {
-      api.setHeader('Authorization', token).sendExtRequest(Path.userProfile, undefined, function (response) {
+      api.sendExtRequest(Path.userProfile, undefined, true, function (response) {
         dispatch({
           type: 'getProfileDetails',
           data: response.data.data,
