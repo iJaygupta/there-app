@@ -3,11 +3,6 @@ import Path from '~/config/apipath';
 
 
 const auth = {
-  otp: function (countryCode, mobile, deviceIP, callback) {
-    return dispatch => {
-      api.setMethod('PUT').sendRequest(Path.OTP, { country_code: countryCode, phone: mobile, deviceid: deviceIP }, false, callback, dispatch)
-    }
-  },
   login: function (data, callback) {
     return dispatch => {
       api.setMethod('POST').sendRequest(Path.logIn, data, function (response) {
@@ -24,9 +19,19 @@ const auth = {
   },
   signUp: function (data, callback) {
     return dispatch => {
-      api.setMethod('POST').sendRequest(Path.signUp, data,callback, dispatch)
+      api.setMethod('POST').sendRequest(Path.signUp, data, callback, dispatch)
     }
   },
+  otp: function (token, callback) {
+    return dispatch => {
+      api.setHeader('Authorization', token).sendExtRequest(Path.OTP, undefined, callback, dispatch)
+    }
+  },
+  otpValidate: function (token, data, callback) {
+    return dispatch => {
+      api.setMethod('POST').setHeader('Authorization', token).sendExtRequest(Path.OTPValidate, data, callback, dispatch)
+    }
+  }
 }
 
 export default auth;

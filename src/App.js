@@ -44,7 +44,7 @@ const AuthNavigator = createStackNavigator(
     OTP: OTP
   },
   {
-    initialRouteName: "OTP",
+    initialRouteName: "Login",
     headerMode: 'none',
   }
 );

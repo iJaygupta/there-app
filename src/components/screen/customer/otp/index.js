@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import { View, Keyboard, } from "react-native";
+import { View, Keyboard, ToastAndroid } from "react-native";
 import { Container, Text, Button, Icon } from 'native-base';
-import storage from '~/lib/storage';
 import { Card, Input } from '~/components/ui';
 import styles from './styles';
-
 
 export default class OTP extends Component {
 
@@ -20,7 +18,7 @@ export default class OTP extends Component {
   loginHandler = async () => {
     Keyboard.dismiss();
     if (await this.otpValidator()) {
-      this.loginApiCall();
+      this.verifiyOTP();
     }
   }
 
@@ -39,31 +37,35 @@ export default class OTP extends Component {
     this.props.navigation.navigate('Profile');
   }
 
-  loginApiCall = () => {
-    const { authAction } = this.props;
-    const username = this.state.phoneCountry + this.state.phoneNumber;
-    const password = this.state.password;
+  verifiyOTP = () => {
+    const { authAction, userData } = this.props;
+    const token = userData.token;
+    const phoneNumber = 91 + this.props.navigation.state.params.userData;
+    const userOTP = this.state.otp;
     let data = JSON.stringify({
-      'mobile': username,
-      'password': password,
+      'mobile': phoneNumber,
+      'code': userOTP,
     });
-    authAction.login(data, this.loginSuccessResponse);
+    authAction.otpValidate(token, data, this.otpSuccessResponse);
   }
 
-  loginSuccessResponse = (response) => {
+  otpSuccessResponse = (response) => {
     const responseData = response.data;
     if (!responseData.error) {
-      const userData = {
-        token: responseData.token,
-        user_info: responseData.data,
-      };
-      storage.setStorage('data', userData);
-      this.navigateToHome();
+      if (responseData.code === 4012) {
+        this.navigateToHome();
+      } else {
+        this.setState({
+          otp: ''
+        });
+        ToastAndroid.show(responseData.msg, ToastAndroid.LONG);
+      }
+    } else {
+      ToastAndroid.show(responseData.msg, ToastAndroid.LONG);
     }
   }
 
   render() {
-    console.log(this.props)
     return (
       <Container style={styles.container}>
         <Text style={styles.headerText}>OTP</Text>

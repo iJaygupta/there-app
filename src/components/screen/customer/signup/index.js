@@ -38,9 +38,11 @@ export default class SignUp extends Component {
     return true;
   }
 
-  navigateToHome() {
+  navigateToLoginScreen() {
     ToastAndroid.show('SignUp Succesfuly!', ToastAndroid.SHORT);
-    this.props.navigation.navigate('Login');
+    const userData = this.state;
+    const mobileNumber = 91 + userData.phoneNumber;
+    this.props.navigation.navigate('Login', { userData: mobileNumber });
   }
 
   signUpUserApi = () => {
@@ -58,10 +60,11 @@ export default class SignUp extends Component {
 
   signupSuccessResponse = (response) => {
     const responseJson = response.data;
+    console.log('responseJson =>', responseJson);
     if (responseJson.code === 4000) {
-      this.navigateToHome();
+      this.navigateToLoginScreen();
     } else {
-      ToastAndroid.show(responseJson.data.exception, ToastAndroid.LONG);
+      ToastAndroid.show(responseJson.msg, ToastAndroid.LONG);
     }
   }
 

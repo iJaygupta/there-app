@@ -39,7 +39,7 @@ const self = {
         callback(response);
       })
       .catch(function (error) {
-        console.error("API LIB ERROR : ", error);
+        console.log("API LIB ERROR : ", error);
       });
   },
   sendExtRequest: function (url, data, callback, dispatch) {

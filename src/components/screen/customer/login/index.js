@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, TouchableOpacity, Keyboard, } from "react-native";
+import { View, TouchableOpacity, Keyboard, ToastAndroid } from "react-native";
 import { Container, Text, Button, Icon } from 'native-base';
 import storage from '~/lib/storage';
 import { Card, Input } from '~/components/ui';
@@ -15,7 +15,7 @@ export default class login extends Component {
       phoneNumber: '',
       password: '',
       error: false,
-      errorMesg: ''
+      errorMesg: '',
     }
   }
 
@@ -44,8 +44,9 @@ export default class login extends Component {
     return true;
   }
 
-  navigateToHome = () => {
-    this.props.navigation.navigate('Profile');
+  navigateToOTP = () => {
+    const phoneNumber = this.state.phoneNumber;
+    this.props.navigation.navigate('OTP', { userData: phoneNumber });
   }
 
   loginApiCall = () => {
@@ -67,7 +68,27 @@ export default class login extends Component {
         user_info: responseData.data,
       };
       storage.setStorage('data', userData);
-      this.navigateToHome();
+      if (!responseData.data.is_phone_verified) {
+        this.getOTP(userData);
+      } else {
+        this.props.navigation.navigate('Profile');
+      }
+    }
+  }
+
+  getOTP = (userData) => {
+    const { authAction } = this.props;
+    const token = userData.token;
+    authAction.otp(token, this.otpSuccessResponse);
+  }
+
+  otpSuccessResponse = (response) => {
+    const responseData = response.data;
+    if (!responseData.error) {
+      this.navigateToOTP();
+      ToastAndroid.show(responseData.msg, ToastAndroid.LONG);
+    } else {
+      ToastAndroid.show(responseData.msg, ToastAndroid.LONG);
     }
   }
 
